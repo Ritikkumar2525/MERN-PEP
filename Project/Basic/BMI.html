@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BMI Calculator</title>
+    <link rel="stylesheet" href="BMI.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="box">
+        <h2>Height Converter</h2>
+
+        <label>Feet</label>
+        <input type="number" id="feet">
+
+        <label>Inches</label>
+        <input type="number" id="inches">
+
+        <button onclick="convertHeight()">Convert</button>
+
+        <p id="meterResult">Height in meter</p>
+    </div>
+
+    <div class="box">
+        <h2>BMI Calculator</h2>
+
+        <label>Weight (kg)</label>
+        <input type="number" id="weight">
+
+        <label>Height (m)</label>
+        <input type="number" step="0.01" id="height">
+
+        <button onclick="calculateBMI()">Calculate BMI</button>
+
+        <p id="bmiResult">Your BMI</p>
+    </div>
+
+</div>
+
+<script>
+function convertHeight() {
+    let feet = document.getElementById("feet").value;
+    let inches = document.getElementById("inches").value;
+
+    let meter = ((feet * 12) + Number(inches)) * 0.0254;
+    meter = meter.toFixed(2);
+
+    document.getElementById("meterResult").innerText = "Meter: " + meter;
+    document.getElementById("height").value = meter;
+}
+
+function calculateBMI() {
+    let w = document.getElementById("weight").value;
+    let h = document.getElementById("height").value;
+
+    let bmi = (w / (h * h)).toFixed(2);
+    let status = "";
+
+    if (bmi < 18.5)
+        status = "Patla hai re tu";
+    else if (bmi < 25)
+        status = "jindagi ji le";
+    else
+        status = "pahle apna pet dekh";
+
+    document.getElementById("bmiResult").innerText =
+        "BMI: " + bmi + " (" + status + ")";
+}
+</script>
+
+</body>
+</html>

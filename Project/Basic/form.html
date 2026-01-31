@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+
+    <form action="" method="post">
+        <h3>Registration Form</h3>
+
+        <label>First Name</label>
+        <input type="text" placeholder="First Name">
+
+        <label>Last Name</label>
+        <input type="text" placeholder="Last Name">
+        <br><br>
+
+        <label>Email</label>
+        <input type="email" placeholder="xxxx@gmail.com" required>
+        <br><br> 
+
+        <label>Gender</label>
+        <input type="radio" name="gender" value="Male"> Male
+        <input type="radio" name="gender" value="Female"> Female
+        <br><br>
+
+        <label>Select Course</label>
+        <select name="course">
+            <option value="">-- Select Course --</option>
+            <option value="cse">Computer Science</option>
+            <option value="it">Information Technology</option>
+            <option value="ece">Electronics</option>
+            <option value="me">Mechanical</option>
+        </select>
+        <br><br>
+
+        <label>Upload Image</label>
+        <input type="file" accept="image/*">
+        <br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+</html>

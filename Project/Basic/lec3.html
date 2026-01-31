@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Todo App</h2>
+
+    <input type="text" id="taskInput" placeholder="Enter task">
+    <button onclick="addTask()">Add</button>
+
+    <ul id="taskList"></ul>
+</div>
+
+<script>
+function addTask() {
+    let task = document.getElementById("taskInput").value;
+
+    if (task === "") return;
+
+    let li = document.createElement("li");
+    li.innerText = task;
+
+    li.onclick = function () {
+        li.remove();
+    };
+
+    document.getElementById("taskList").appendChild(li);
+    document.getElementById("taskInput").value = "";
+}
+</script>
+
+</body>
+</html>

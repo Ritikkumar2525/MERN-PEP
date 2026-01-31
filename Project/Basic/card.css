@@ -1,0 +1,38 @@
+body {
+    background: #f0f0f0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .card {
+    width: 650px;
+    height: 350px;
+    background: white;
+    display: flex;
+    margin: 40px auto;
+    border: 1px solid #ccc;
+  }
+  
+  .left {
+    width: 30%;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.883);
+  }
+  
+  .left img {
+    width: 120px;
+    height: 120px;
+    margin-top: 20px;
+    border: 1px solid black;
+  }
+  
+  .right {
+    width: 70%;
+    padding: 10px;
+  }
+  
+  .valid {
+    margin-top: 15px;
+    font-size: 13px;
+  }
+  
