@@ -14,12 +14,10 @@ app.use(express.static(path.join(__dirname, "public")));
 let complaints = [];
 let idCounter = 1;
 
-// Get all complaints
 app.get("/complaints", (req, res) => {
   res.json(complaints);
 });
 
-// Get complaint by ID
 app.get("/complaints/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const complaint = complaints.find(c => c.id === id);
@@ -31,7 +29,6 @@ app.get("/complaints/:id", (req, res) => {
   res.json(complaint);
 });
 
-// Add complaint
 app.post("/complaints", (req, res) => {
   const { fullname, email, phone, title, description } = req.body;
 
@@ -53,7 +50,6 @@ app.post("/complaints", (req, res) => {
   res.status(201).json(newComplaint);
 });
 
-// Update status
 app.put("/complaints/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const { status } = req.body;
@@ -68,7 +64,6 @@ app.put("/complaints/:id", (req, res) => {
   res.json(complaint);
 });
 
-// Delete complaint
 app.delete("/complaints/:id", (req, res) => {
   const id = parseInt(req.params.id);
   complaints = complaints.filter(c => c.id !== id);

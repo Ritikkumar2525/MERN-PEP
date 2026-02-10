@@ -24,9 +24,9 @@ function submitComplaint() {
     .then(res => res.json())
     .then(data => {
       document.getElementById("message").innerText =
-        `✅ Complaint submitted successfully! Your ID is: ${data.id}`;
+        `Complaint submitted successfully! Your ID is: ${data.id}`;
   
-      // Clear form
+      
       document.getElementById("fullname").value = "";
       document.getElementById("email").value = "";
       document.getElementById("phone").value = "";
@@ -89,11 +89,6 @@ function submitComplaint() {
     });
   }
   
-  
-  
-  // ===============================
-  // UPDATE STATUS
-  // ===============================
   function updateStatus(id, status) {
   
     fetch(`/complaints/${id}`, {
@@ -111,9 +106,6 @@ function submitComplaint() {
     });
   }
   
-  
-  
-
   function deleteComplaint(id) {
   
     if (!confirm("Are you sure you want to delete this complaint?")) {
