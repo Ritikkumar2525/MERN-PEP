@@ -1,7 +1,0 @@
-<script>start("/Users/ritikkumar/Desktop/MERN/Project/Node/complaint-tracker/");</script>
-<script>onHasParentDirectory();</script>
-<script>addRow("node_modules","node_modules",1,2176,"2.1 kB",1770288609,"05/02/2026, 16:20:09");</script>
-<script>addRow("public","public",1,160,"160 B",1770541984,"08/02/2026, 14:43:04");</script>
-<script>addRow("package-lock.json","package-lock.json",0,28945,"28.3 kB",1770288609,"05/02/2026, 16:20:09");</script>
-<script>addRow("package.json","package.json",0,335,"335 B",1770288705,"05/02/2026, 16:21:45");</script>
-<script>addRow("server.js","server.js",0,1911,"1.9 kB",1770542017,"08/02/2026, 14:43:37");</script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Complaint Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <h2>Complaint Tracker</h2>
+  <a href="admin.html">Admin Panel</a>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <h2>Submit Complaint</h2>
+
+    <input id="fullname" placeholder="Full Name">
+    <input id="email" placeholder="Email">
+    <input id="phone" placeholder="Phone">
+    <input id="title" placeholder="Subject">
+    <textarea id="description" placeholder="Description"></textarea>
+
+    <button onclick="submitComplaint()">Submit</button>
+    <p id="message"></p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
