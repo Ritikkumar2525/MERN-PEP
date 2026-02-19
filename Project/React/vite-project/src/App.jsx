@@ -1,12 +1,16 @@
 import React from 'react'
-
-const App = () => {
+import { useState } from 'react'
+import ColorChange from './components/ColorChange.jsx';
+import MoodSwitcher from './components/MoodSwitcher.jsx';
+import CharacterCounter from './CharacterCounter.jsx';
+import Theme from './components/Theme.jsx';
+function App(){
   return (
     <div>
-      <h1>React class 1</h1>
-      <h3>React class 2</h3>
-      <button>click me</button>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, earum recusandae. Maxime saepe itaque molestiae dolore quam enim quae natus atque eaque officiis ipsum perferendis debitis expedita, eius dolores commodi.</p>
+      {/* <ColorChange/> */}
+      {/* <MoodSwitcher/> */}
+      {/* <CharacterCounter/> */}
+      <Theme/>
     </div>
   )
 }

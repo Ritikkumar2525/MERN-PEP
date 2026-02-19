@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Anonymous Confession Wall</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { darkMode: 'class' }
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  font-family:'Inter',sans-serif;
+  background:url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e") no-repeat center center fixed;
+  background-size:cover;
+}
+
+.heading-font{ font-family:'Playfair Display',serif; }
+
+.fade-in{ animation:fadeIn 0.5s ease forwards; }
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(15px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.card-hover{ transition:all .3s ease; }
+.card-hover:hover{ transform:translateY(-6px); }
+
+.glass-card{
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.2);
+}
+
+.dark .glass-card{
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  padding:14px 20px;
+  border-radius:10px;
+  color:white;
+  font-size:14px;
+  opacity:0;
+  transform:translateY(20px);
+  transition:.4s ease;
+  z-index:9999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+</style>
+</head>
+
+<body class="text-gray-800 dark:text-gray-100 transition-colors duration-500">
+
+<div id="toast" class="toast bg-red-500"></div>
+
+<!-- NAVBAR -->
+<nav class="border-b bg-white/70 dark:bg-gray-900/70 backdrop-blur-md shadow-sm">
+<div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+<h1 class="heading-font text-2xl">CONFESSION WALL</h1>
+
+<div class="flex gap-3 items-center">
+<button onclick="toggleDark()" class="flex items-center gap-2 px-4 py-2 rounded-lg border dark:border-gray-600">
+<span id="themeIcon">🌘</span>
+<span id="themeText">Dark Mode</span>
+</button>
+
+<button id="logoutBtn" onclick="logout()" class="hidden px-4 py-2 rounded-lg bg-red-500 text-white hover:scale-105 transition">
+Logout
+</button>
+
+<button id="loginBtn" onclick="login()" class="px-4 py-2 rounded-lg border border-black dark:border-gray-400 hover:bg-black hover:text-white transition">
+Login with Google
+</button>
+</div>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="text-center py-16 px-6 text-white">
+<h2 class="heading-font text-4xl mb-4">Share Your Truth.</h2>
+<p class="max-w-xl mx-auto opacity-80">
+Express anonymously. React freely. Edit securely with your secret code.
+</p>
+</section>
+
+<!-- FORM -->
+<section id="formSection" class="max-w-2xl mx-auto px-6 mb-16 hidden">
+<div class="glass-card p-8 rounded-2xl shadow-2xl space-y-5 fade-in">
+
+<div id="userInfo" class="text-sm text-white/80"></div>
+
+<textarea id="text"
+placeholder="Write your confession..."
+class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/20 resize-none focus:outline-none"></textarea>
+
+<input type="password"
+id="code"
+placeholder="Secret Code"
+class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/20 focus:outline-none"/>
+
+<div class="flex justify-end">
+<button onclick="postConfession()"
+class="px-6 py-2 bg-black/80 text-white rounded-lg hover:scale-105 transition">
+Post
+</button>
+</div>
+
+</div>
+</section>
+
+<section class="max-w-3xl mx-auto px-6 pb-20">
+<div id="confessions" class="space-y-8"></div>
+</section>
+
+<script>
+const API="http://localhost:8000";
+let currentUser=null;
+
+function showToast(message,color="bg-red-500"){
+const toast=document.getElementById("toast");
+toast.className=`toast ${color}`;
+toast.textContent=message;
+toast.classList.add("show");
+setTimeout(()=>toast.classList.remove("show"),3000);
+}
+
+(function(){
+if(localStorage.getItem("theme")==="dark"){
+document.documentElement.classList.add("dark");
+document.getElementById("themeIcon").textContent="☀️";
+document.getElementById("themeText").textContent="Light Mode";
+}
+})();
+
+function toggleDark(){
+const html=document.documentElement;
+html.classList.toggle("dark");
+if(html.classList.contains("dark")){
+document.getElementById("themeIcon").textContent="☀️";
+document.getElementById("themeText").textContent="Light Mode";
+localStorage.setItem("theme","dark");
+}else{
+document.getElementById("themeIcon").textContent="🌘";
+document.getElementById("themeText").textContent="Dark Mode";
+localStorage.setItem("theme","light");
+}
+}
+
+function login(){ window.location.href=API+"/auth/google"; }
+function logout(){ window.location.href=API+"/auth/logout"; }
+
+async function checkUser(){
+const res=await fetch(API+"/auth/user",{credentials:"include"});
+const user=await res.json();
+if(user){
+currentUser=user;
+document.getElementById("loginBtn").classList.add("hidden");
+document.getElementById("logoutBtn").classList.remove("hidden");
+document.getElementById("formSection").classList.remove("hidden");
+document.getElementById("userInfo").innerHTML=`Logged in as <strong>${user.displayName||user.name}</strong>`;
+}
+}
+checkUser();
+
+async function postConfession(){
+const text=document.getElementById("text").value;
+const code=document.getElementById("code").value;
+
+if(!text||!code){
+showToast("Fill all fields");
+return;
+}
+
+await fetch(API+"/confessions",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+credentials:"include",
+body:JSON.stringify({text,secretCode:code})
+});
+
+document.getElementById("text").value="";
+document.getElementById("code").value="";
+
+showToast("Confession posted!","bg-green-500");
+loadConfessions();
+}
+
+async function loadConfessions(){
+const res=await fetch(API+"/confessions");
+const data=await res.json();
+
+document.getElementById("confessions").innerHTML=data.map(c=>`
+<div class="glass-card p-6 rounded-xl shadow-lg card-hover fade-in text-white">
+<div class="flex justify-between text-sm opacity-80 mb-2">
+<div>
+<strong>${c.userName||"User"}</strong>
+<span class="ml-2">${c.createdAt?new Date(c.createdAt).toLocaleString():""}</span>
+</div>
+</div>
+
+<p class="mb-4">${c.text}</p>
+
+<div class="flex justify-between items-center">
+<div class="flex gap-4 text-sm">
+<button onclick="react('${c._id}','like')" class="hover:scale-125 transition">👍 ${c.reactions.like}</button>
+<button onclick="react('${c._id}','love')" class="hover:scale-125 transition">❤️ ${c.reactions.love}</button>
+<button onclick="react('${c._id}','laugh')" class="hover:scale-125 transition">😂 ${c.reactions.laugh}</button>
+</div>
+
+<div class="flex gap-3 text-xs">
+<button onclick="editConfession('${c._id}')" class="hover:text-blue-400">Edit</button>
+<button onclick="deleteConfession('${c._id}')" class="hover:text-red-400">Delete</button>
+</div>
+</div>
+</div>
+`).join("");
+}
+loadConfessions();
+
+async function react(id,type){
+await fetch(API+`/confessions/${id}/react`,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({type})
+});
+loadConfessions();
+}
+
+async function editConfession(id){
+const newText=prompt("Enter new text:");
+const code=prompt("Enter secret code:");
+if(!newText||!code)return;
+
+const res=await fetch(API+`/confessions/${id}`,{
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({newText,secretCode:code})
+});
+
+if(!res.ok){
+showToast("Wrong passcode!");
+return;
+}
+showToast("Confession updated!","bg-green-500");
+loadConfessions();
+}
+
+async function deleteConfession(id){
+const code=prompt("Enter secret code:");
+if(!code)return;
+
+const res=await fetch(API+`/confessions/${id}`,{
+method:"DELETE",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({secretCode:code})
+});
+
+if(!res.ok){
+showToast("Wrong passcode!");
+return;
+}
+showToast("Confession deleted!","bg-green-500");
+loadConfessions();
+}
+</script>
+
+</body>
+</html>
